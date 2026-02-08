@@ -99,7 +99,6 @@ int read_options(int min, int max)
         }
         else
         {
-
             printf("\n  -!- Invalid input. Enter a number between %d and %d. -!-\n\n",
                    min, max);
         }
@@ -191,15 +190,9 @@ void add_item(Order *o)
         o->count++;
         calculate_totals(o);
 
-        while (getchar() != '\n')
-            ;
-
         printf("\n-*- Item added successfully -*-\n\n");
         printf("-> Do you want to add another item? (y/n): ");
         scanf(" %c", &choice);
-
-        while (getchar() != '\n')
-            ;
 
     } while (choice == 'y' || choice == 'Y');
 }
@@ -223,13 +216,13 @@ void view_order(Order *o)
 
     for (int i = 0; i < o->count; i++)
     {
-        double line = o->items[i].price * o->items[i].qty;
+        double total = o->items[i].price * o->items[i].qty;
         printf("%-2d %-24s %4d %8.2f %8.2f\n",
                i + 1,
                o->items[i].name,
                o->items[i].qty,
                o->items[i].price,
-               line);
+               total);
     }
 
     printf("--------------------------------------------------\n");
@@ -257,21 +250,13 @@ void remove_item(Order *o)
     {
         view_order(o);
 
-        printf("> Enter item number to remove (0 to cancel): ");
-        scanf("%d", &index);
-        while (getchar() != '\n')
-            ;
+        printf("> Enter item number to remove (0 to cancel) ");
+        index = read_options(0, o->count);
+
         if (index == 0)
             return;
-
-        if (index < 0 || index > o->count)
-        {
-            printf("\n  -!- No such item number - take a look -!-\n");
-        }
-        if (index > 0 && index <= o->count)
-        {
+        else
             break;
-        }
     }
     printf("\n-*- Item %d removed successfully. -*-\n", index);
     index--;
